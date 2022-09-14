@@ -1,0 +1,74 @@
+---
+title: "Before we Start"
+teaching: 10
+exercises: 5
+questions:
+- "FIX ME"
+objectives:
+- "FIX ME"
+keypoints:
+- "FIX ME"
+
+source: Rmd
+---
+
+```{r, include = FALSE}
+source("../bin/chunk-options.R")
+knitr_fig_path("00-")
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Enron var et amerikansk energiselskab, der gik konkurs i 2001. De var med
+22.000 ansatte en af verdens største energivirksomheder, og havde i 2000
+en omsætning på 111 milliarder USD. Og seks år i træk betegnede finanstidsskriftet
+Fortune Enron som det mest innovative selskab i USA. 
+
+Lidt for innovative. Resulaterne skyldtes systematisk regnskabssvindel.
+
+historien om datasættet.
+
+
+ambitionen er et eller andet der er af interesse for jurastuderende.
+
+Så vi kigger på enrondatasættet. Og håber vi kan få noget interessant ud
+uden at skulle bruge alt for voldsomme mentoder.
+
+Kaggle har den også. Og den er måske at foretrække at arbejde med.
+https://www.kaggle.com/datasets/wcukierski/enron-email-dataset
+
+Der er også en række notebooks der kan tages udgangspunkt i.
+Denne om sentiment analyse:
+https://www.kaggle.com/code/hardikjain10/email-sentiment-analysis
+
+Der dog mangler en tidslinie hvis man spørger mig.
+
+https://rpubs.com/Koba/enron-network-code
+https://rodgersnotes.wordpress.com/2013/11/24/analyzing-keywords-in-enrons-email/
+
+
+downloades herfra:
+https://www.cs.cmu.edu/~enron/
+Vi får det som en tar.gz fil.
+
+den skal pakkes ud - og det er en lidt bøvlet proces der skal forklares.
+
+Men så har vi en mappe liggende i vores projekt, der hedder maildir.
+
+Jeg skal her være ret omhyggelig - for det output der skal vises skal ikke 
+genereres af github - det skal genereres lokalt, og puttes ind i siden.
+
+vi får brug for en stopordsliste.
+Den kan startes med:
+```{r}
+stopord <- c("Enron", "com", "http", "Subject", "message", "time", "cc", "www")
+```
+
+```{r}
+library(tidyverse)
+df <- read_csv(unzip("../data/emails.zip"))
+nrow(df)
+```
+
