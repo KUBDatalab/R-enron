@@ -68,3 +68,9 @@ Den kan startes med:
 stopord <- c("Enron", "com", "http", "Subject", "message", "time", "cc", "www")
 ```
 
+```{r}
+library(tidyverse)
+df <- read_csv(unzip("../data/emails.zip"))
+nrow(df)
+```
+
