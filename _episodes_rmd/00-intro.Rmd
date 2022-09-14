@@ -48,9 +48,7 @@ Der dog mangler en tidslinie hvis man spørger mig.
 https://rpubs.com/Koba/enron-network-code
 https://rodgersnotes.wordpress.com/2013/11/24/analyzing-keywords-in-enrons-email/
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+
 downloades herfra:
 https://www.cs.cmu.edu/~enron/
 Vi får det som en tar.gz fil.
