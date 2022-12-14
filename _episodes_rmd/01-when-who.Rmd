@@ -1,0 +1,78 @@
+---
+title: "When do they send mails?"
+teaching: 10
+exercises: 5
+questions:
+- "FIX ME"
+objectives:
+- "FIX ME"
+keypoints:
+- "FIX ME"
+
+source: Rmd
+---
+
+```{r, include = FALSE}
+source("../bin/chunk-options.R")
+knitr_fig_path("01-")
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Vi har datasættet. Hvornår sender de mails? Kan vi plotte det?
+
+Ja, vi har jo en masse rækker, der hver især er det tidspunkt.
+Hvis vi kunne pille datoen ud, og tælle hvor mange mails der blev sendt hver
+dag. Så kunne vi nok lave et plot. Lad os prøve det!
+
+Det er ikke let at arbejde med datoer. Ikke kun i R, det er bare generelt noget
+bøvl.
+
+Heldigvis eksisterer der en pakke der gør det - ikke let - men lettere:
+
+Vi gør lige som før, og installerer den (nb - nyere udgaver har den med i tidyverse)
+
+
+```{r install-lubridate, eval=F}
+install.packages("lubridate")
+```
+
+Og så indlæser vi den:
+```{r}
+library(lubridate)
+```
+
+Nå. Vi har en tabel med data, en dataframe. Og vi har nogle datoer - med tidspunkter.
+Hvis vi godt vil kigge på datoen, i stedet for tidspunkterne.
+
+Så skal vi have pillet datoen ud. Altså gå fra at vi har en kolonne med denne 
+type indhold:
+2001-05-14 23:39:00
+Til en kolonne der har denne type indhold:
+2001-05-14
+
+det er der en funktion til i lubridate:
+```{r}
+ymd_hms("2001-05-14 23:39:00", tz = "PDT") %>% 
+  date()
+```
+få skrevet en tilstrækkelig forklaring omkring tidszoner...
+
+Så vi vil godt lave en kolonne baseret på en anden kolonne.
+
+Det er der en funktion til. den hedder mutate(). Den laver en ny kolonne, baseret på
+en anden kolonne (eller flere kolonner, den kan ret meget). Uden at ændre på den
+gamle.
+
+Mutate funktionen skal have at vide hvad vi vil kalde den nye kolonne. og så skal
+vi også fortælle hvad indholdet i den nyekolonne skal være.
+
+```{r}
+df %>% 
+  head() %>% 
+  mutate(date = ymd_hms(date, tz = "PDT")) %>% 
+  mutate(dato = date(date))
+```
+

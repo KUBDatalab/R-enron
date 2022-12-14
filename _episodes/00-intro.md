@@ -27,44 +27,72 @@ Lidt for innovative. Resulaterne skyldtes systematisk regnskabssvindel.
 
 historien om datasættet.
 
+## Taking a look at the data
 
-ambitionen er et eller andet der er af interesse for jurastuderende.
+We have the data in a zip-file, located in, if we followed the instructions in
+the setup, the "data" folder in our project.
 
-Så vi kigger på enrondatasættet. Og håber vi kan få noget interessant ud
-uden at skulle bruge alt for voldsomme mentoder.
+A zip file cannot be read directly. But R has a function called unzip() that will
+unzip the file. We do that by typing unzip(). That is the function name. We 
+also need to specify which file we want to unzip, including the path to the 
+directory, so the unzip function knows where to find the file. 
 
-Kaggle har den også. Og den er måske at foretrække at arbejde med.
-https://www.kaggle.com/datasets/wcukierski/enron-email-dataset
+The combined path and filename is what we call a string, or text. In R we 
+indicate that something is text by placing it in quotation marks:
 
-Der er også en række notebooks der kan tages udgangspunkt i.
-Denne om sentiment analyse:
-https://www.kaggle.com/code/hardikjain10/email-sentiment-analysis
-
-Der dog mangler en tidslinie hvis man spørger mig.
-
-https://rpubs.com/Koba/enron-network-code
-https://rodgersnotes.wordpress.com/2013/11/24/analyzing-keywords-in-enrons-email/
-
-
-downloades herfra:
-https://www.cs.cmu.edu/~enron/
-Vi får det som en tar.gz fil.
-
-den skal pakkes ud - og det er en lidt bøvlet proces der skal forklares.
-
-Men så har vi en mappe liggende i vores projekt, der hedder maildir.
-
-Jeg skal her være ret omhyggelig - for det output der skal vises skal ikke 
-genereres af github - det skal genereres lokalt, og puttes ind i siden.
-
-vi får brug for en stopordsliste.
-Den kan startes med:
 
 ~~~
-stopord <- c("Enron", "com", "http", "Subject", "message", "time", "cc", "www")
+unzip("data/emails.zip")
 ~~~
 {: .language-r}
 
+The unzip file will return the content of the zip-file. We know, because we have
+prepared the zip-file in that way, that the content is a csv-file.
+
+Looking at a spreadsheet, eg Excel, we see that we have rows, containing 
+some observation, and columns, with variables
+
+INDSÆT BILLEDE TIL ILLUSTRATION
+
+The intersection between rows and colums are called cells.
+
+Excel is a great tool, but it does not always play nice with other tools. A way
+to get data out of excel is to export it as CSV, or Comma Separated Values.
+
+A CSV-file is a text-file, only containing text, and with one line for each row
+of the spreadsheet. Each cell is separated by a comma, hence Comma separated.
+
+CSV files are easier to work with. But we still need to read it into R, so we 
+can work with the data.
+
+A good function for doing that is read_csv(), which, as the name implies takes
+a csv-file as input, and reads it.
+
+Now we need to get the output of the unzip function into the read_csv function.
+There are several ways of doing this, but a nice way is using a pipe.
+
+The pipe %>% takes what is on the left side of it, and sends it to what is on 
+the right hand side of it.
+
+The pipe is not native to R, but can be imported from external packages or
+libraries. The concept is that someone smarter than us have written useful functions
+that are not present in R as such, and distributed them in collections of functions,
+or packages on the internet.
+
+R have a robust way of importing packages, and the one we are going to work with
+here is called tidyverse.
+
+Getting to use at package comes in two steps. First we install it on our computer
+using the function install.packages():
+
+~~~
+install.packages("tidyverse")
+~~~
+{: .language-r}
+
+Note that the name is a text-string, and in quotation marks.
+
+Then we read in the package in R, so we can access it, using the function library():
 
 ~~~
 library(tidyverse)
@@ -75,20 +103,26 @@ library(tidyverse)
 
 ~~~
 ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──
-✔ ggplot2 3.3.6      ✔ purrr   0.3.4 
+✔ ggplot2 3.4.0      ✔ purrr   0.3.5 
 ✔ tibble  3.1.8      ✔ dplyr   1.0.10
-✔ tidyr   1.2.1      ✔ stringr 1.4.1 
-✔ readr   2.1.2      ✔ forcats 0.5.2 
+✔ tidyr   1.2.1      ✔ stringr 1.5.0 
+✔ readr   2.1.3      ✔ forcats 0.5.2 
 ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
 ✖ dplyr::filter() masks stats::filter()
 ✖ dplyr::lag()    masks stats::lag()
 ~~~
 {: .output}
 
+Note that after we have installed tidyverse on our computer, tidyverse is no longer
+a text string, but an object in R that we can call directly.
+
+After doing this, we have access to the pipe (and read_csv btw), and can read in
+the zip-file:
 
 
 ~~~
-df <- read_csv(unzip("../data/emails.zip"))
+df <- unzip("../data/emails.zip") %>% 
+  read_csv()
 ~~~
 {: .language-r}
 
@@ -105,18 +139,64 @@ dttm (1): date
 ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 ~~~
 {: .output}
+We unzip the file, and use the pipe to send the output of that file to read_csv.
+read_csv reads in the csv-file, and we store the data coming from the csv file
+to an object in R, called df, using the assignment operator <-.
 
+Think of that leftpointing arrow as, "put the result of what is on the right
+hand side into what we write on the lefthand side.
 
+df is an object, sometimes we call it a variable, which is kinda not entirely wrong.
+We can store almost anything i objects, and we can call them almost everything we 
+like.
+
+So - what have we done so far?
+
+We have read in more than ½ million emails from a zipped csv-file, to an object
+in R, that we call df.
+
+df is what we call a data frame, hence the abbreviation, and can be thought of
+as the equivalent of a spreadsheet.
+
+Let us take at look at the data. The function head() will show us the first six
+rows:
 
 ~~~
-nrow(df)
+head(df)
 ~~~
 {: .language-r}
 
 
 
 ~~~
-[1] 517401
+# A tibble: 6 × 6
+  file                     from        to    date                subject content
+  <chr>                    <chr>       <chr> <dttm>              <chr>   <chr>  
+1 allen-p/_sent_mail/1.    phillip.al… tim.… 2001-05-14 23:39:00 <NA>    Here i…
+2 allen-p/_sent_mail/10.   phillip.al… john… 2001-05-04 20:51:00 Re:     Travel…
+3 allen-p/_sent_mail/100.  phillip.al… leah… 2000-10-18 10:00:00 Re: te… test s…
+4 allen-p/_sent_mail/1000. phillip.al… rand… 2000-10-23 13:13:00 <NA>    Randy, 
+5 allen-p/_sent_mail/1001. phillip.al… greg… 2000-08-31 12:07:00 Re: He… Let's …
+6 allen-p/_sent_mail/1002. phillip.al… greg… 2000-08-31 11:17:00 Re: He… Greg,  
 ~~~
 {: .output}
+
+We only see the first x columns, but there is a sixth, containing the actual content
+of the email.
+
+The columns contain the following data:
+
+file - the original file that the mail was stored in. Interesting information 
+might be stored here, because we can see that the first few rows are all from
+the sent_mail folder. There is also deleted folders and others.
+from - the e-mail of the person who sent the mail.
+to - the e-mail(s) of the person(s) who the mail was sent to.
+date - the date and time of the mail. In UTC. Most of the mails were actually sent from PDT
+subject - the subject of the mail
+content - the actual content of the mail.
+
+But wait?! You wrote that this was big data and the original file is 1.4 Gb in size?
+
+This file has been pared down. Basically all attachments have been removed.
+
 
